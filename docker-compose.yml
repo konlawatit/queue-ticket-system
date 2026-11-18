@@ -1,0 +1,46 @@
+# SQL Server for local development and E2E tests.
+# The API and the web app run on the host (dotnet run / npm run dev) and connect to 127.0.0.1:1433.
+# Step 9 adds the api and web services so the whole system starts with one command.
+#
+#   docker compose up -d db
+#
+# ---------------------------------------------------------------------------
+# About the sa password: it is committed on purpose and is NOT a secret.
+#
+# This repository is a job-application test project, not a production system.
+# The password only protects a throwaway SQL Server container that runs on the
+# reviewer's own machine, listens on 127.0.0.1 only and holds no real data.
+# Keeping a working default here lets the project run right after `git clone`
+# with no setup. The same value is in
+# backend/src/QueueSystem.Api/appsettings.Development.json.
+#
+# In a real deployment the password would come from a secret store or the
+# environment, never from the repository, and the API would not log in as sa.
+# To use another password locally, see .env.example.
+# ---------------------------------------------------------------------------
+name: queue-ticket-system
+
+services:
+  db:
+    # Pinned to a cumulative update so every machine runs the same build.
+    image: mcr.microsoft.com/mssql/server:2022-CU28-ubuntu-22.04
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer # free edition for development and testing, not for production
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:-LocalDev_Passw0rd!} # dev-only default, see the note above
+    ports:
+      # Reachable from this machine only. IPv4 only, so clients must use 127.0.0.1
+      # rather than localhost (which resolves to ::1 first on Windows).
+      - "127.0.0.1:1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    healthcheck:
+      # $$ passes the variable through to the container instead of Compose expanding it.
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -b -Q 'SELECT 1' -o /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+volumes:
+  mssql-data:

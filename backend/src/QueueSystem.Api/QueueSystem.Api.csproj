@@ -1,5 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <PropertyGroup>
+    <!-- Optional: lets a developer override the committed dev connection string
+         without editing tracked files:
+         dotnet user-secrets set "ConnectionStrings:QueueDb" "..." -->
+    <UserSecretsId>34c55492-ee74-49ed-b7eb-951805d28142</UserSecretsId>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\QueueSystem.Application\QueueSystem.Application.csproj" />
     <ProjectReference Include="..\QueueSystem.Infrastructure\QueueSystem.Infrastructure.csproj" />
