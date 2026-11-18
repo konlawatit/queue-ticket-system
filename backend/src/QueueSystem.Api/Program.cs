@@ -1,4 +1,3 @@
-using QueueSystem.Api.Endpoints;
 using QueueSystem.Api.ErrorHandling;
 using QueueSystem.Application;
 using QueueSystem.Infrastructure;
@@ -7,6 +6,7 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
 builder.Services.AddOpenApi(options => options.AddDocumentTransformer((document, _, _) =>
 {
     document.Info.Title = "Queue Ticket System API";
@@ -44,6 +44,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapHealthChecks("/health");
-app.MapQueueEndpoints();
+app.MapControllers();
 
 await app.RunAsync();
