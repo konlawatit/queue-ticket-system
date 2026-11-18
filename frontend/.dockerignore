@@ -1,0 +1,9 @@
+node_modules
+.next
+test-results
+playwright-report
+blob-report
+# Never copy local env files into an image; settings come from the container environment.
+.env*
+Dockerfile
+.dockerignore
