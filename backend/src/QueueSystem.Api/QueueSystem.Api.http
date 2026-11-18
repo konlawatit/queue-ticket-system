@@ -1,0 +1,24 @@
+# Manual requests for Visual Studio / Rider / VS Code (REST Client).
+# Start the database (docker compose up -d db) and the API (dotnet run) first.
+# Interactive docs: http://localhost:5080/scalar
+
+@baseUrl = http://localhost:5080
+
+### Issue the next ticket -> 201 with { id, code, issuedAt }, or 409 once Z9 is issued
+# @name issue
+POST {{baseUrl}}/api/queue/tickets
+
+### Get the ticket just issued
+GET {{baseUrl}}/api/queue/tickets/{{issue.response.body.$.id}}
+
+### Unknown ticket -> 404 ProblemDetails
+GET {{baseUrl}}/api/queue/tickets/999999
+
+### Current code of this round ("00" if none)
+GET {{baseUrl}}/api/queue/current
+
+### Reset the queue -> { "code": "00" }
+POST {{baseUrl}}/api/queue/reset
+
+### Health check
+GET {{baseUrl}}/health
