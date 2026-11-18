@@ -32,13 +32,17 @@ cd queue-ticket-system
 docker compose up --build
 ```
 
-Open **http://localhost:8080**. The first build takes a few minutes; the database schema is created automatically.
+When all containers are up, open **http://localhost:8080** in your browser. The first build takes a few minutes; the database schema is created automatically.
 
-| Service | URL | Notes |
-|---|---|---|
-| Web | http://localhost:8080 | Next.js |
-| API | http://localhost:8081/health | ASP.NET Core |
-| SQL Server | `127.0.0.1,1433` | user `sa`, password `LocalDev_Passw0rd!` |
+Use the ports in the **"Open from your machine"** column. The container logs print each server's port *inside its container* (for example `web-1 | - Local: http://localhost:3000`); those addresses do not work from your browser, so ignore them.
+
+| Service | Open from your machine | Port inside the container (shown in the logs) | Notes |
+|---|---|---|---|
+| Web | **http://localhost:8080** | 3000 | Next.js |
+| API | **http://localhost:8081/health** | 8080 | ASP.NET Core |
+| SQL Server | **`127.0.0.1,1433`** | 1433 | user `sa`, password `LocalDev_Passw0rd!` |
+
+Docker forwards each port on your machine to the port inside its container (`docker-compose.yml`: `"127.0.0.1:8080:3000"` means *your machine 8080 → container 3000*). Ports 3000 and 5080 on your machine are left free for the development setup below, so both can run at the same time.
 
 Stop with `Ctrl+C`. `docker compose down` keeps the data; `docker compose down -v` deletes it.
 
