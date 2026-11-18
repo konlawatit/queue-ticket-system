@@ -8,4 +8,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.15" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- QueueService is internal; the unit tests construct it directly with fakes. -->
+    <InternalsVisibleTo Include="QueueSystem.UnitTests" />
+  </ItemGroup>
+
 </Project>
