@@ -1,0 +1,30 @@
+# Store text as LF in the repo and check it out as LF on every OS.
+# Overrides core.autocrlf, so Windows, Docker (Linux) and CI all see the same bytes.
+* text=auto eol=lf
+
+# Windows-only scripts
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Language-aware diffs (better hunk headers)
+*.cs   diff=csharp
+*.md   diff=markdown
+*.html diff=html
+*.css  diff=css
+
+# Binary files
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+*.pdf   binary
+*.docx  binary
+
+# Generated files: collapsed in GitHub pull request diffs
+**/Migrations/*.Designer.cs     linguist-generated=true
+**/Migrations/*ModelSnapshot.cs linguist-generated=true
+package-lock.json               linguist-generated=true
